@@ -1,183 +1,79 @@
-# LaravelでAirbnb風アプリケーションを作る!
+<p align="center"><img src="https://res.cloudinary.com/dtfbvvkyp/image/upload/v1566331377/laravel-logolockup-cmyk-red.svg" width="400"></p>
 
-本リポジトリは、Laravelを使った勉強用のAirbnb風のアプリケーションのリポジトリです。
+<p align="center">
+<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/d/total.svg" alt="Total Downloads"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/v/stable.svg" alt="Latest Stable Version"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
+</p>
 
-## 1. 環境セットアップ
+## About Laravel
 
-### 1-1. クローン：gitリポジトリをダウンロード
+Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
 
-```sh
-$ git clone git@github.com:tomo1833/aribstyle.git
-```
+- [Simple, fast routing engine](https://laravel.com/docs/routing).
+- [Powerful dependency injection container](https://laravel.com/docs/container).
+- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
+- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
+- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
+- [Robust background job processing](https://laravel.com/docs/queues).
+- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
 
+Laravel is accessible, powerful, and provides tools required for large, robust applications.
 
-## windows環境（docker）
+## Learning Laravel
 
-┏━━━━━━━┓　　　┏━━━━━━━┓　　　┏━━━━━━━┓
-┃ nginx ┃　　　┃Laravel┃　　　┃ mysql ┃　
-┃       ┃　　　┃       ┃　　　┃       ┃
-┗━━━━━━━┛　　　┗━━━━━━━┛　　　┗━━━━━━━┛
+Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
 
-## Nginx
+If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
 
-webサーバーはnginxを使います
+## Laravel Sponsors
 
-## 設定ファイル作成
+We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
 
-### docker-compose.yml
+- **[Vehikl](https://vehikl.com/)**
+- **[Tighten Co.](https://tighten.co)**
+- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
+- **[64 Robots](https://64robots.com)**
+- **[Cubet Techno Labs](https://cubettech.com)**
+- **[Cyber-Duck](https://cyber-duck.co.uk)**
+- **[British Software Development](https://www.britishsoftware.co)**
+- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
+- **[DevSquad](https://devsquad.com)**
+- [UserInsights](https://userinsights.com)
+- [Fragrantica](https://www.fragrantica.com)
+- [SOFTonSOFA](https://softonsofa.com/)
+- [User10](https://user10.com)
+- [Soumettre.fr](https://soumettre.fr/)
+- [CodeBrisk](https://codebrisk.com)
+- [1Forge](https://1forge.com)
+- [TECPRESSO](https://tecpresso.co.jp/)
+- [Runtime Converter](http://runtimeconverter.com/)
+- [WebL'Agence](https://weblagence.com/)
+- [Invoice Ninja](https://www.invoiceninja.com)
+- [iMi digital](https://www.imi-digital.de/)
+- [Earthlink](https://www.earthlink.ro/)
+- [Steadfast Collective](https://steadfastcollective.com/)
+- [We Are The Robots Inc.](https://watr.mx/)
+- [Understand.io](https://www.understand.io/)
+- [Abdel Elrafa](https://abdelelrafa.com)
+- [Hyper Host](https://hyper.host)
+- [Appoly](https://www.appoly.co.uk)
+- [OP.GG](https://op.gg)
+- [云软科技](http://www.yunruan.ltd/)
 
-docker-compose.ymlの内容を以下のように指定します。
+## Contributing
 
-```dickerfile
-FROM php:7.2-fpm
+Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
 
-# install composer
-RUN cd /usr/bin && curl -s http://getcomposer.org/installer | php && ln -s /usr/bin/composer.phar /usr/bin/composer
-RUN apt-get update \
-    && apt-get install -y \
-    git \
-    zip \
-    unzip \
-    vim
+## Code of Conduct
 
-RUN apt-get update \
-    && apt-get install -y libpq-dev \
-    && docker-php-ext-install pdo_mysql pdo_pgsql
+In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
 
-WORKDIR /var/www/html
-```
+## Security Vulnerabilities
 
-```yml
-version: '3'
-services:
-    web:
-        image: nginx:1.15.6
-        ports:
-        - "8000:80"
-        depends_on:
-        - app
-        volumes:
-        - ./docker/web/default.conf:/etc/nginx/conf.d/default.conf
-        - .:/var/www/html
-    app:
-        build: ./docker/php
-        depends_on:
-            - mysql
-        volumes:
-          - .:/var/www/html
-    mysql:
-        image: mysql:5.7
-        environment:
-            MYSQL_DATABASE: airbnb
-            MYSQL_USER: root
-            MYSQL_PASSWORD: password
-            MYSQL_ROOT_PASSWORD: password
-        ports:
-            - "3306:3306"
-        volumes:
-            - ./mysql-data:/var/lib/mysql```
-```
+If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
 
-### サンプルページ（静的ファイル)
+## License
 
-index.htmlはサンプル用に作成します。
-
-```html
-<?php phpinfo();
-```
-
-## dockerコンテナの作成と起動
-
-```sh
-$ docker-compose up -d
-```
-
-docker-compose upは作成と起動を一緒に実施します。
-
--dはオプションで デーモン（バックグラウンドで動作する）です。
-
-以下のように出力されます。
-
-```sh
-・・・略・・・
-Creating docker_web_server_web_1 ... done  
-```
-
-## ブラウザ表示確認
-
-http://localhost:8000 でアクセスして画面が表示されることを確認します。
-
-
-## Larabel
-
-### マイグレーション
-
-マイグレーションをします。
-
-### シーダー
-
-シダーを使ってデータを登録します。
-
-
-### 1-2. 対象バージョン
-
-|アプリ|バージョン|
-|:--|:--|
-|PHP|7.X|
-|MySQL|5.X|
-
-## 2. ER図
-
-本アプリケーションで使用するデータベースのER図です。
-
-
-
-## 3. 機能の概要
-
-本アプリケーションは以下の画面があります。
-
-* トップ画面
-* 検索結果画面
-* ルーム画面
-* ログイン画面(Laravelが提供する機能)
-* 会員（ユーザ）登録画面(Laravelが提供する機能)
-
-### トップ画面
-
-最初に表示される画面です。
-ロケーション（場所）、チェックイン、チェックアウト（滞在期間）、人数で検索することができます。
-
-### 検索結果画面
-
-検索結果の画面です。
-トップ画面で指定した条件に合致するルームを表示します。
-また、Google mapを表示します。
-
-### ルーム画面
-
-検索結果画面で指定したルームの画面です。
-ルームの確認、予約状況の確認、予約の登録、口コミの登録が出来ます。
-
-### ログイン画面
-
-会員のログイン画面です。
-会員のログインが出来ます。
-本アプリでは、Laravelが提供する機能を使ってログイン画面を表示します。
-
-### 会員登録画面
-
-会員の登録画面です。
-会員の登録が出来ます。
-本アプリでは、Laravelが提供する機能を使って会員の登録画面を表示します。
-
-
-## 4. ライブラリに関して
-
-本アプリで利用したライブラリを以下に記載します。
-
-|ライブラリ|バージョン|備考|
-|:--|:--|:--|
-|composer|1.10.5|php用ライブラリ管理ツール|
-|Google map api|X||
-|bootstrap|4|cssフレームワークを採用しています。cdnを利用しています。|
-|JQuery|X|cdnを利用しています。|
+The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
