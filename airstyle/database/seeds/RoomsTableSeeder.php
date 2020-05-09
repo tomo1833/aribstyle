@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class ShopsTableSeeder extends Seeder
+class RoomsTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -11,7 +11,7 @@ class ShopsTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('shops')->insert([
+        DB::table('rooms')->insert([
         [
           'name' => 'Lucky Hostel in Shinjuku',
           'address' => '東京都新宿区新宿1丁目1-1',
@@ -27,6 +27,8 @@ class ShopsTableSeeder extends Seeder
 新大久保駅は徒歩で６分、新宿駅は徒歩で１１分の距離です。
 大久保駅、次の駅が新宿駅です',
           'image_url' => 'room_01.jpg',
+          'adults' => 3,
+          'children' => 3,
         ],
         [
           'name' => 'コアラ',
@@ -42,11 +44,14 @@ class ShopsTableSeeder extends Seeder
 ＜繁華街へのアクセス＞
 　池袋まで電車・バスで１０分、新宿まで電車で約２０分、東京駅まで電車で約３０分です。',
           'image_url' => 'room_02.jpg',
+          'adults' => 4,
+          'children' => 3,
         ],
         [
           'name' => 'Asakusa Private Guest Room',
           'address' => '東京都台東区浅草1丁目1-1',
           'price' =>  5800,
+
           'description' => 'これは私たちのデザインスタジオによって作成され実行されるゲストルームです。私たちの場所は、人気のある浅草エリアにあります。札幌通りから徒歩1分です。
 
 - プライベートルーム：エアコン、無料の無線LANアクセス、読書灯、電源コンセント。コーヒーと紅茶を無料で提供しています。
@@ -64,6 +69,8 @@ class ShopsTableSeeder extends Seeder
 その他の特記事項
 建物1Fにレセプションがあります。お気軽にお声掛けください。',
           'image_url' => 'room_03.jpg',
+          'adults' => 7,
+          'children' => 5,
         ],
         [
           'name' => 'Lucky Hostel in ueno',
@@ -97,6 +104,8 @@ class ShopsTableSeeder extends Seeder
 近くにコインラウンドリー、コンビニやスーパー、様々な種類の飲食店がございますし、
 施設内の電子レンジ、冷蔵庫、冷凍庫、ケトルをご自由にお使いいただけます。',
           'image_url' => 'room_04.jpg',
+          'adults' => 4,
+          'children' => 3,
         ],
         [
           'name' => 'Lucky Hostel in shibuya',
@@ -158,6 +167,8 @@ class ShopsTableSeeder extends Seeder
 •7-11、ローソンとファミリーマートはすべて非常に近い（徒歩2〜3分）
 •すべて24時間営業しています。',
           'image_url' => 'room_05.jpg',
+          'adults' => 7,
+          'children' => 4,
         ],
       ]);
     }

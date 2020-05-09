@@ -75,7 +75,6 @@
                 }
 
                 $new_price = $price * $date_count;
-
                 $('#date_count').text($date_count);
                 $('#price_detail').text($new_price.toLocaleString());
                 $('#price_sum').text($new_price.toLocaleString());
@@ -214,18 +213,18 @@
             });
 
             $('#review_post').on('click', function () {
-                $shop_id = $('#shop_id').val();
+                $room_id = $('#room_id').val();
                 $comment = $('#comment').val();
 
                 var json_request_data = {
-                    "shop_id": $shop_id,
+                    "room_id": $room_id,
                     "comment": $comment
                 };
                 $.ajax({
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
-                    url: '/shop/reviewpost/',
+                    url: '/room/reviewpost/',
                     type: 'POST',
                     contentType: "application/json",
                     data: JSON.stringify(json_request_data),
@@ -252,14 +251,14 @@
             });
 
             $('#reserv_confirm').on('click', function () {
-                $shop_id = $('#shop_id').val();
+                $room_id = $('#room_id').val();
                 $start_date = $('#stay_start_date').val();
                 $end_date = $('#stay_end_date').val();
                 $stay_number = $('#stay_number_hidden').val();
                 $price = $('#price_sum_hidden').val();
 
                 var json_request_data = {
-                    "shop_id": $shop_id,
+                    "room_id": $room_id,
                     "start_date": $start_date,
                     "end_date": $end_date,
                     "stay_number": $stay_number,
@@ -269,7 +268,7 @@
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
-                    url: '/shop/reservconfirm/',
+                    url: '/room/reservconfirm/',
                     type: 'POST',
                     contentType: "application/json",
                     data: JSON.stringify(json_request_data),
@@ -366,7 +365,7 @@
 
             <div class="row">
                 <div class="col-6" style="height: 680px;">
-                    <img src="{{ asset('/images/' . $shop->image_url) }}">
+                    <img src="{{ asset('/images/' . $room->image_url) }}">
                 </div>
             </div>
         </header>
@@ -376,9 +375,9 @@
             <div class="row mt-5 ">
                 <div class="col-2">&nbsp;</div>
                 <div class="col-4">
-                    <h1>{{$shop->name}}</h1>
-                    <input type="hidden" name="shop_id" id="shop_id" value="{{$shop->id}}">
-                    <p>{{$shop->description}}</p>
+                    <h1>{{$room->name}}</h1>
+                    <input type="hidden" name="room_id" id="room_id" value="{{$room->id}}">
+                    <p>{{$room->description}}</p>
 
                     <h2>予約可能状況</h2>
                     <table class="table table-bordered" id="reserv_data_main_table">
@@ -450,8 +449,8 @@
 
                     <div class="card">
                         <div class="card-header">
-                            <h3>{{ number_format($shop->price) }} / 1泊</h3>
-                            <input type="hidden" name="price" id="price" value="{{$shop->price}}">
+                            <h3>{{ number_format($room->price) }} / 1泊</h3>
+                            <input type="hidden" name="price" id="price" value="{{$room->price}}">
                         </div>
                         <div class="card-body">
 
@@ -561,10 +560,10 @@
                             <div class="form-group">
                                 <div class="row mt-3">
                                     <div class="col">
-                                        <span>{{ number_format($shop->price) }} x <span id="date_count">1</span>泊</span>
+                                        <span>{{ number_format($room->price) }} x <span id="date_count">1</span>泊</span>
                                     </div>
                                     <div class="col  text-right">
-                                        <span id="price_detail">{{ number_format($shop->price) }}</span>
+                                        <span id="price_detail">{{ number_format($room->price) }}</span>
                                     </div>
                                 </div>
                                 <div class="row mt-3">
@@ -572,7 +571,7 @@
                                         <span>合計額</span>
                                     </div>
                                     <div class="col  text-right">
-                                        <span id="price_sum">{{ number_format($shop->price) }}</span>
+                                        <span id="price_sum">{{ number_format($room->price) }}</span>
                                         <input type="hidden" name="price_sum_hidden" id="price_sum_hidden" value="">
                                     </div>
                                 </div>

@@ -70,22 +70,22 @@
         <main class="border-bottom mb-5 pb-5 px-5">
             <div class="row">
                 <div class="col-6">
-                    @foreach ($shops as $shop)
+                    @foreach ($rooms as $room)
                     <div class="row">
-                        <a href="/shop/{{$shop->id}}/" class="text-dark" style="text-decoration: none;">
+                        <a href="/room/{{$room->id}}/" class="text-dark" style="text-decoration: none;">
                             <div class="card mb-3">
                                 <div class="row no-gutters">
                                     <div class="col-md-4">
-                                        <img src="{{asset('/images/' . $shop->image_url)}}"
+                                        <img src="{{asset('/images/' . $room->image_url)}}"
                                             class="card-img img-thumbnail" alt="..."
                                             style="　width: 250px;  height: 250px;object-fit: cover;">
                                     </div>
                                     <div class="col-md-8">
                                         <div class="card-body">
-                                            <h3 class="card-title">{{ $shop->name }}</h3>
+                                            <h3 class="card-title">{{ $room->name }}</h3>
                                             <p class="card-text"
                                                 style="max-height:120px; overflow: hidden; text-overflow: ellipsis;">
-                                                {{ $shop->description }}</p>
+                                                {{ $room->description }}</p>
                                             <p class="card-text"><small class="text-muted"></small></p>
                                         </div>
                                     </div>
@@ -96,7 +96,8 @@
                     @endforeach
                 </div>
                 <div class="col-6">
-                    <div id="map" style="height: 100vh; width: 100%; auto 0;"></div>
+                    <div id="map" style="height: 100vh
+                    ; width: 100%; auto 0;"></div>
 
                     <!-- jqueryの読み込む -->
                     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>

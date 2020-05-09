@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddDataToShopsTable extends Migration
+class CreateRoomsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,16 @@ class AddDataToShopsTable extends Migration
      */
     public function up()
     {
-        Schema::table('shops', function (Blueprint $table) {
+        Schema::create('rooms', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
             $table->text('address');
-            $table->integer('price');
             $table->text('description');
             $table->text('image_url');
+            $table->integer('price');
+            $table->integer('adults');
+            $table->integer('children');
+            $table->timestamps();
         });
     }
 
@@ -28,8 +33,6 @@ class AddDataToShopsTable extends Migration
      */
     public function down()
     {
-        Schema::table('shops', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('rooms');
     }
 }

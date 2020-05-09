@@ -22,14 +22,10 @@ class GuideController extends Controller
         $adults = $request->input('adults');
         $children = $request->input('children');
 
-        // 検索条件設定
-        $where_value = [];
-
-
         // ショップテーブルから店舗を取得する
-        $shops = DB::table('shops')
+        $rooms = DB::table('rooms')
                 ->when($location, function ($query) use ($location) {
-                    return $query->where('address', 'LIKE',  '%'. $location .'%');
+                    return $query->where('address', 'LIKE', '%'. $location .'%');
                 })
                 ->when($adults, function ($query) use ($adults) {
                     return $query->where('adults', '>=', $adults);
@@ -37,29 +33,29 @@ class GuideController extends Controller
                 ->when($children, function ($query) use ($children) {
                     return $query->where('children', '>=', $children);
                 })
-                ->when($start_date or $end_date , function ($query) use ($start_date, $end_date) {
-                    return $query->whereNotExists(function($query) use ($start_date, $end_date) {
-                        return $query->select('shop_id')
+                ->when($start_date or $end_date, function ($query) use ($start_date, $end_date) {
+                    return $query->whereNotExists(function ($query) use ($start_date, $end_date) {
+                        return $query->select('room_id')
                             ->from('reservs')
-                                ->when($start_date, function($query) use($start_date) {
-                                    return $query->where(function($query) use($start_date)  {
+                                ->when($start_date, function ($query) use ($start_date) {
+                                    return $query->where(function ($query) use ($start_date) {
                                         return $query->where('start_date', '<=', $start_date)
                                             ->where('end_date', '>=', $start_date);
                                     });
                                 })
-                                ->when($end_date, function($query) use($end_date) {
-                                    return $query->orWhere(function($query) use($end_date)  {
+                                ->when($end_date, function ($query) use ($end_date) {
+                                    return $query->orWhere(function ($query) use ($end_date) {
                                         return $query->where('start_date', '<=', $end_date)
                                             ->where('end_date', '>=', $end_date);
                                     });
                                 })
-                            ->groupBy('shop_id')
-                            ->havingRaw('shop_id = shops.id');
+                            ->groupBy('room_id')
+                            ->havingRaw('room_id = rooms.id');
                     });
                 })
                 ->get();
 
         // 取得した値をビュー「guide/index」に渡す
-        return view('guide/index', ['shops' => $shops]);
+        return view('guide/index', ['rooms' => $rooms]);
     }
 }

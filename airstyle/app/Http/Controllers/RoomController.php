@@ -8,32 +8,32 @@ use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
 /**
- * 店舗画面のコントローラ.
+ * ルーム部屋画面のコントローラ.
  */
-class ShopController extends Controller
+class RoomController extends Controller
 {
     /**
      * Show the application dashboard.
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function index($shop_id)
+    public function index($room_id)
     {
         $now = Carbon::now();
         $dates =  $this->getCalendarDates($now->year, $now->month);
 
     	// ショップテーブルから店舗を取得する
-        $shop= DB::table('shops')->find($shop_id);
+        $room= DB::table('rooms')->find($room_id);
 
     	// 予約テーブルから予約情報を取得する
-        $reservs = DB::table('reservs')->where('shop_id', $shop_id)->whereMonth('start_date', $now->month)->get();
+        $reservs = DB::table('reservs')->where('room_id', $room_id)->whereMonth('start_date', $now->month)->get();
 
     	// レビューテーブルからレビュー情報を取得する
-        $reviews = DB::table('reviews')->join('users', 'user_id', '=', 'users.id')->select('reviews.*', 'users.name')->where('shop_id', $shop_id)->get();
+        $reviews = DB::table('reviews')->join('users', 'user_id', '=', 'users.id')->select('reviews.*', 'users.name')->where('room_id', $room_id)->get();
 
 
         // 取得した値をビュー「guide/index」に渡す
-        return view('shop/index', ['shop' => $shop, 'reviews' => $reviews, 'dates' => $dates, 'reservs' => $reservs]);
+        return view('room/index', ['room' => $room, 'reviews' => $reviews, 'dates' => $dates, 'reservs' => $reservs]);
     }
     
     /**
@@ -50,20 +50,21 @@ class ShopController extends Controller
             return redirect('/login/');
         }
         
-        $shop_id = $request->input('shop_id');
+        $room_id = $request->input('room_id');
         $stay_number = $request->input('stay_number');
         $start_date = $request->input('start_date');
         $end_date = $request->input('end_date');
         $price = $request->input('price');
 
-        DB::table('reservs')->insert(['shop_id' => $shop_id, 'user_id' => $user_id, 'people_number' => $stay_number, 'start_date' => $start_date, 'end_date' => $end_date, 'price' => $price]);
+
+        DB::table('reservs')->insert(['room_id' => $room_id, 'user_id' => $user_id, 'adults' => $stay_number, 'children' => 0, 'start_date' => $start_date, 'end_date' => $end_date, 'price' => $price]);
 
         $respons_json = response()->json([
             'start_date' => $start_date,
             'end_date' => $end_date,            
             'result' => 'sucess',
          ]);
-
+         
         return $respons_json;
 
     }
@@ -82,10 +83,10 @@ class ShopController extends Controller
         } else {
             return redirect('/login/');
         }
-        $shop_id = $request->input('shop_id');
+        $room_id = $request->input('room_id');
         $comment = $request->input('comment');
 
-        DB::table('reviews')->insert(['shop_id' => $shop_id, 'user_id' => $user_id, 'comment' => $comment]);
+        DB::table('reviews')->insert(['room_id' => $room_id, 'user_id' => $user_id, 'comment' => $comment]);
    
         $respons_json = response()->json([
             'result' => 'sucess',
