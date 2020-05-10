@@ -10,11 +10,47 @@
 
 ## windows環境（docker）
 
+Dockerを使って環境を構築します。
+Dockerのインストール方法は省略します。
+
 ## 設定ファイル作成
 
+### docker-compose.yml
+
+```yml
+version: '3'
+services:
+    web:
+        image: nginx:1.15.6
+        ports:
+            - "8000:80"
+        depends_on:
+            - app
+        volumes:
+            - ./default.conf:/etc/nginx/conf.d/default.conf
+            - .:/var/www/html
+    app:
+        build: .
+        depends_on:
+            - mysql
+        volumes:
+          - ./aribstyle/:/var/www/html
+
+    mysql:
+        image: mysql:5.7
+        environment:
+            MYSQL_DATABASE: airbnb
+            MYSQL_USER: airbnb
+            MYSQL_PASSWORD: password
+            MYSQL_ROOT_PASSWORD: password
+        ports:
+            - "3306:3306"
+        volumes:
+            - ./data:/var/lib/mysql
+```
 ### Dockerfile
 
-```dickerfile
+```dockerfile
 FROM php:7.2-fpm
 
 # install composer
@@ -31,38 +67,6 @@ RUN apt-get update \
     && docker-php-ext-install pdo_mysql pdo_pgsql
 
 WORKDIR /var/www/html
-```
-### docker-compose.yml
-
-```yml
-version: '3'
-services:
-    web:
-        image: nginx:1.15.6
-        ports:
-        - "8000:80"
-        depends_on:
-        - app
-        volumes:
-        - ./docker/web/default.conf:/etc/nginx/conf.d/default.conf
-        - .:/var/www/html
-    app:
-        build: ./docker/php
-        depends_on:
-            - mysql
-        volumes:
-          - .:/var/www/html
-    mysql:
-        image: mysql:5.7
-        environment:
-            MYSQL_DATABASE: airbnb
-            MYSQL_USER: root
-            MYSQL_PASSWORD: password
-            MYSQL_ROOT_PASSWORD: password
-        ports:
-            - "3306:3306"
-        volumes:
-            - ./mysql-data:/var/lib/mysql```
 ```
 
 ### クローン：gitリポジトリをダウンロード
@@ -82,22 +86,52 @@ docker-compose upは作成と起動を一緒に実施します。
 
 -dはオプションで デーモン（バックグラウンドで動作する）です。
 
-以下のように出力されます。
 
+### composer更新
 
-## ブラウザ表示確認
+```sh
+$ composer update
+```
 
-http://localhost:8000 でアクセスして画面が表示されることを確認します。
+### .env修正
 
-## Larabel
+.env.example コピー
+.env
+
+```sh
+DB_CONNECTION=mysql
+DB_HOST=mysql
+DB_PORT=3306
+DB_DATABASE=airbnb
+DB_USERNAME=root
+DB_PASSWORD=password
+```
 
 ### マイグレーション
 
 マイグレーションをします。
 
+```sh
+$ php artisan migrate
+```
+
 ### シーダー
 
-シダーを使ってデータを登録します。
+```sh
+php artisan db:seed --class=RoomsTableSeeder
+
+```
+
+### appキー作成
+```sh
+php artisan key:generate
+```
+
+
+## ブラウザ起動
+
+http://localhost:8000 でアクセスして画面が表示されることを確認します。
+
 
 
 ### 対象バージョン
