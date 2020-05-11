@@ -8,6 +8,115 @@
 
 ## Cloud9環境
 
+PHPのバージョン確認
+
+```sh
+$ php -v
+```
+
+MySqlのバージョン確認
+
+```sh
+$ mysql --version
+```
+
+### パッケージのアップデート
+
+```sh
+sudo yum -y update
+```
+
+### PHP 7.3 インストール 
+
+```sh
+$ sudo yum -y install php73 php73-cli php73-common php73-devel php73-mysqlnd php73-pdo php73-xml php73-gd php73-intl php73-mbstring php73-mcrypt php73-zip
+```
+
+### PHPバージョンの切り替え 
+
+```sh
+$ sudo alternatives --set php /usr/bin/php-7.3
+```
+
+### MySQL停止
+
+```sh
+$ sudo service mysqld stop
+```
+
+### MySQLアンインストール
+
+```sh
+$ sudo yum -y erase mysql-config mysql55-server mysql55-libs mysql55
+```
+
+### MySQLインストール
+
+```sh
+$ sudo yum -y install mysql57-server mysql57
+```
+
+### MySQL起動
+
+```sh
+$ sudo service mysqld start
+```
+
+### MySQL起動(サーバー起動時)
+
+```sh
+sudo chkconfig mysqld on
+```
+
+### 初期設定
+
+```sh
+$ mysql_secure_installation
+```
+
+Yを入力
+0を入力
+
+rootパスワード設定
+**********
+控えておくこと
+
+あとはY
+
+
+### MySqlログイン
+
+```sh
+$ mysql -u root -p
+```
+
+### データベース作成
+
+```sql
+CREATE DATABASE airbnb CHARACTER SET utf8mb4;
+```
+
+### データベース確認
+
+```sql
+show databases;
+```
+### データベース退去
+
+```
+exit
+```
+
+### クローン：gitリポジトリをダウンロード
+
+```sh
+$ git clone https://github.com/tomo1833/airbnbstyle.git
+```
+
+
+
+
+
 ## windows環境（docker）
 
 Dockerを使って環境を構築します。
@@ -28,7 +137,7 @@ services:
             - app
         volumes:
             - ./default.conf:/etc/nginx/conf.d/default.conf
-            - .:/var/www/html
+            - ./aribstyle/:/var/www/html
     app:
         build: .
         depends_on:
@@ -47,6 +156,7 @@ services:
             - "3306:3306"
         volumes:
             - ./data:/var/lib/mysql
+
 ```
 ### Dockerfile
 
@@ -72,7 +182,7 @@ WORKDIR /var/www/html
 ### クローン：gitリポジトリをダウンロード
 
 ```sh
-$ git clone git@github.com:tomo1833/aribstyle.git
+$ git clone https://github.com/tomo1833/airbnbstyle.git
 ```
 
 
