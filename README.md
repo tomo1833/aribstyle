@@ -280,8 +280,9 @@ $ composer update
 
 ### .env修正
 
-.env.example コピー
-.env
+```sh
+$ cp .env.example ./.env
+```
 
 ```sh
 DB_CONNECTION=mysql
@@ -339,7 +340,7 @@ http://localhost:8000 でアクセスして画面が表示されることを確�
 本アプリケーションは以下の画面があります。
 
 * トップ画面
-* 検��結果画面
+* 検索結果画面
 * ルーム画面
 * ログイン画面(Laravelが提供する機能)
 * 会員（ユーザ）登録画面(Laravelが提供する機能)
