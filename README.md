@@ -8,13 +8,13 @@
 
 ## Cloud9環境
 
-PHPのバージョン確認
+## PHPのバージョン確認
 
 ```sh
 $ php -v
 ```
 
-MySqlのバージョン確認
+## MySqlのバージョン確認
 
 ```sh
 $ mysql --version
@@ -107,13 +107,88 @@ show databases;
 exit
 ```
 
-### クローン：gitリポジトリをダウンロード
+### gitリポジトリ先ファイルバックアップ
+
+一時フォルダ作成
 
 ```sh
-$ git clone https://github.com/tomo1833/airbnbstyle.git
+$ mkdir ../tmp
 ```
 
+ディレクトリコピー
 
+```sh
+$ cp -r .c9/ ../tmp/.c9
+```
+
+削除
+
+```sh
+$ rm -rf .c9/
+$ rm README.md
+```
+
+### クローン：gitリポジトリをダウンロード
+
+airbnbstyle配下の資産をダウンロードする
+
+```sh
+$ git clone https://github.com/tomo1833/airbnbstyle/　.
+```
+
+### gitリポジトリ先ファイル戻し
+
+```sh
+$ cp -r ../tmp/.c9　.
+```
+
+### composer インストール
+
+```sh
+curl -sS https://getcomposer.org/installer | php
+```
+
+### composer アップデータ
+
+```sh
+$ composer update
+```
+
+### 環境ファイル更新
+
+```sh
+$ cp .env.example ./.env
+```
+
+### 環境ファイル更新
+
+```sh
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=airbnb
+DB_USERNAME=root
+DB_PASSWORD=password
+```
+### マイグレーション
+
+マイグレーションをします。
+
+```sh
+$ php artisan migrate
+```
+
+### シーダー
+
+```sh
+php artisan db:seed --class=RoomsTableSeeder
+
+```
+
+### appキー作成
+```sh
+php artisan key:generate
+```
 
 
 
@@ -264,7 +339,7 @@ http://localhost:8000 でアクセスして画面が表示されることを確�
 本アプリケーションは以下の画面があります。
 
 * トップ画面
-* 検索結果画面
+* 検��結果画面
 * ルーム画面
 * ログイン画面(Laravelが提供する機能)
 * 会員（ユーザ）登録画面(Laravelが提供する機能)
@@ -316,3 +391,4 @@ http://localhost:8000 でアクセスして画面が表示されることを確�
 |Google map api|X||
 |bootstrap|4|cssフレームワークを採用しています。cdnを利用しています。|
 |JQuery|X|cdnを利用しています。|
+
