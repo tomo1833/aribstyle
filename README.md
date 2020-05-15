@@ -133,13 +133,13 @@ $ rm README.md
 airbnbstyle配下の資産をダウンロードする
 
 ```sh
-$ git clone https://github.com/tomo1833/airbnbstyle/　.
+$ git clone https://github.com/tomo1833/airbnbstyle/ .
 ```
 
 ### gitリポジトリ先ファイル戻し
 
 ```sh
-$ cp -r ../tmp/.c9　.
+$ cp -r ../tmp/.c9 .
 ```
 
 ### composer インストール
@@ -148,19 +148,41 @@ $ cp -r ../tmp/.c9　.
 curl -sS https://getcomposer.org/installer | php
 ```
 
+```sh
+$ sudo mv composer.phar /usr/local/bin/composer
+```
+
 ### composer アップデータ
+
+airbnbstyle配下で実施する。
+
+```sh
+$ cd aibnbstyle
+```
 
 ```sh
 $ composer update
 ```
+version 確認
+
+```sh
+composer -V
+```
 
 ### 環境ファイル更新
+
 
 ```sh
 $ cp .env.example ./.env
 ```
 
 ### 環境ファイル更新
+
+vi コマンドで書き換える
+
+```sh
+$ vi .env
+```
 
 ```sh
 DB_CONNECTION=mysql
@@ -170,6 +192,7 @@ DB_DATABASE=airbnb
 DB_USERNAME=root
 DB_PASSWORD=password
 ```
+
 ### マイグレーション
 
 マイグレーションをします。
@@ -181,16 +204,20 @@ $ php artisan migrate
 ### シーダー
 
 ```sh
-php artisan db:seed --class=RoomsTableSeeder
+$ php artisan db:seed --class=RoomsTableSeeder
 
 ```
 
 ### appキー作成
 ```sh
-php artisan key:generate
+$ php artisan key:generate
 ```
 
+### 
 
+```sh
+$ php artisan serve --port=8080
+```
 
 ## windows環境（docker）
 
@@ -304,13 +331,13 @@ $ php artisan migrate
 ### シーダー
 
 ```sh
-php artisan db:seed --class=RoomsTableSeeder
+$ php artisan db:seed --class=RoomsTableSeeder
 
 ```
 
 ### appキー作成
 ```sh
-php artisan key:generate
+$ php artisan key:generate
 ```
 
 
