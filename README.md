@@ -6,15 +6,15 @@
 
 環境のセットアップ方法について記載します。
 
-## Cloud9環境
+## 1.1. Cloud9環境
 
-## PHPのバージョン確認
+### PHPのバージョン確認
 
 ```sh
 $ php -v
 ```
 
-## MySqlのバージョン確認
+### MySqlのバージョン確認
 
 ```sh
 $ mysql --version
@@ -68,7 +68,7 @@ $ sudo service mysqld start
 sudo chkconfig mysqld on
 ```
 
-### 初期設定
+### MySQLの初期設定
 
 ```sh
 $ mysql_secure_installation
@@ -78,10 +78,10 @@ Yを入力
 0を入力
 
 rootパスワード設定
-**********
+　**********
 控えておくこと
 
-あとはY
+あとはY(5回)
 
 
 ### MySqlログイン
@@ -103,10 +103,9 @@ show databases;
 ```
 ### データベース退去
 
-```
+```sql
 exit
 ```
-
 ### gitリポジトリ先ファイルバックアップ
 
 一時フォルダ作成
@@ -147,18 +146,20 @@ $ cp -r ../tmp/.c9 .
 ```sh
 curl -sS https://getcomposer.org/installer | php
 ```
+### composer ファイル移動
 
 ```sh
 $ sudo mv composer.phar /usr/local/bin/composer
 ```
 
-### composer アップデータ
+### composer アップデート
 
 airbnbstyle配下で実施する。
 
 ```sh
-$ cd aibnbstyle
+$ cd airbnbstyle
 ```
+### composer アップデート
 
 ```sh
 $ composer update
@@ -170,7 +171,6 @@ composer -V
 ```
 
 ### 環境ファイル更新
-
 
 ```sh
 $ cp .env.example ./.env
@@ -192,6 +192,8 @@ DB_DATABASE=airbnb
 DB_USERNAME=root
 DB_PASSWORD=password
 ```
+DB_PASSWORDは、MySQLの初期設定で設定したパスワードを使う
+
 
 ### マイグレーション
 
@@ -203,28 +205,35 @@ $ php artisan migrate
 
 ### シーダー
 
+シーダーを使ってデータを登録します。
+
 ```sh
 $ php artisan db:seed --class=RoomsTableSeeder
-
 ```
 
 ### appキー作成
+
 ```sh
 $ php artisan key:generate
 ```
 
-### 
+### サーバーを起動する
 
 ```sh
 $ php artisan serve --port=8080
 ```
 
-## windows環境（docker）
+### 画面確認
+ 
+「Preview」の「Preview Running Application」を実行します。
+
+
+## 1.2. windows環境（docker）
 
 Dockerを使って環境を構築します。
-Dockerのインストール方法は省略します。
+DockerとDocker Composeのインストール方法は省略します。
 
-## 設定ファイル作成
+### 設定ファイル作成
 
 ### docker-compose.yml
 
@@ -260,6 +269,7 @@ services:
             - ./data:/var/lib/mysql
 
 ```
+
 ### Dockerfile
 
 ```dockerfile
@@ -280,6 +290,37 @@ RUN apt-get update \
 
 WORKDIR /var/www/html
 ```
+
+### default.conf
+
+default.confを作成する。
+
+```sh
+server {
+    listen 80;
+
+    root  /var/www/html/airbnbstyle/public;
+    index index.php index.html;
+
+    access_log /var/log/nginx/access.log;
+    error_log  /var/log/nginx/error.log;
+    
+    location / {
+        try_files $uri $uri/ /index.php$is_args$args;
+    }
+
+
+    location ~ \.php$ {
+          fastcgi_split_path_info ^(.+\.php)(/.+)$;
+          fastcgi_pass   app:9000;
+          fastcgi_index  index.php;
+          include        fastcgi_params;
+          fastcgi_param  SCRIPT_FILENAME $document_root$fastcgi_script_name;
+          fastcgi_param  PATH_INFO $fastcgi_path_info;
+      }
+}
+```
+
 
 ### クローン：gitリポジトリをダウンロード
 
@@ -346,13 +387,55 @@ $ php artisan key:generate
 http://localhost:8000 でアクセスして画面が表示されることを確認します。
 
 
+## 1.3. Mac環境（docker）
 
-### 対象バージョン
+Dockerを使って環境を構築します。
+DockerとDocker Composeのインストール方法は省略します。
+
+### 設定ファイル作成
+
+### docker-compose.yml
+
+```yml
+version: '3'
+services:
+    web:
+        image: nginx:1.15.6
+        ports:
+            - "8000:80"
+        depends_on:
+            - app
+        volumes:
+            - ./default.conf:/etc/nginx/conf.d/default.conf
+            - ./aribstyle/:/var/www/html
+    app:
+        build: .
+        depends_on:
+            - mysql
+        volumes:
+          - ./aribstyle/:/var/www/html
+
+    mysql:
+        image: mysql:5.7
+        environment:
+            MYSQL_DATABASE: airbnb
+            MYSQL_USER: airbnb
+            MYSQL_PASSWORD: password
+            MYSQL_ROOT_PASSWORD: password
+        ports:
+            - "3306:3306"
+        volumes:
+            - ./data:/var/lib/mysql
+
+```
+
+## 1.4. 対象バージョン
 
 |アプリ|バージョン|
 |:--|:--|
 |PHP|7.X|
 |MySQL|5.X|
+
 
 ## 2. ER図
 
