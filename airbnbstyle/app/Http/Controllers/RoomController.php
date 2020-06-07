@@ -31,9 +31,8 @@ class RoomController extends Controller
     	// レビューテーブルからレビュー情報を取得する
         $reviews = DB::table('reviews')->join('users', 'user_id', '=', 'users.id')->select('reviews.*', 'users.name')->where('room_id', $room_id)->get();
 
-
         // 取得した値をビュー「guide/index」に渡す
-        return view('room/index', ['room' => $room, 'reviews' => $reviews, 'dates' => $dates, 'reservs' => $reservs]);
+        return view('room/index', ['room' => $room, 'dates' => $dates, 'target_month' => $now, 'reviews' => $reviews, 'reservs' => $reservs]);
     }
     
     /**

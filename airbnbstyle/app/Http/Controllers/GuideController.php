@@ -13,16 +13,23 @@ class GuideController extends Controller
 {
     /**
      * 表示メソッド.
+     * 
+     * @ param Requset request リクエスト
      */
     public function index(Request $request)
     {
+        // 場所
         $location = $request->input('location');
+        // チェックイン
         $start_date = $request->input('start_date');
+        // チェックアウト
         $end_date = $request->input('end_date');
+        // 大人人数
         $adults = $request->input('adults');
+        // 乳幼児人数
         $children = $request->input('children');
 
-        // ショップテーブルから店舗を取得する
+        // 部屋テーブルから店舗を取得する
         $rooms = DB::table('rooms')
                 ->when($location, function ($query) use ($location) {
                     return $query->where('address', 'LIKE', '%'. $location .'%');

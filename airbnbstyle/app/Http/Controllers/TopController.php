@@ -18,14 +18,47 @@ class TopController extends Controller
     {
         $now = Carbon::now();
         $dates =  $this->getCalendarDates($now->year, $now->month);
-        
+
+        $back_month = $now->copy()->addMonthsNoOverflow(-1);
+        $next_month = $now->copy()->addMonthsNoOverflow(1);
+
         // 取得した値をビュー「top/index」に渡す
-        return view('top/index', ['dates' => $dates]);
+        return view('top/index', ['dates' => $dates, 'target_month' => $now, 'back_month' => $back_month, 'next_month' => $next_month]);
     }
-    
+
     /**
-     * カレンダーメソッドです.
+     * カレンダー切り替え.
      * 
+     * @param Request $request リクエスト
+     */
+    public function changeCal(Request $request)
+    {
+        $request_month = $request->input('target_month');
+
+        $target_month = new Carbon($request_month);
+        $dates = $this->getCalendarDates($target_month->year, $target_month->month);
+
+        $back_month = $target_month->copy()->addMonthsNoOverflow(-1);
+        $next_month = $target_month->copy()->addMonthsNoOverflow(1);
+
+        // 取得した値をビュー「top/index」に渡す
+        $respons_json = response()->json([
+            'dates' => $dates,
+            'target_month' => $target_month,
+            'back_month' => $back_month,
+            'next_month' => $next_month,
+            'result' => 'sucess',
+         ]);
+
+        return $respons_json;
+    }
+
+    /**
+     * カレンダーメソッド.
+     *
+     * @param integer $year 年
+     * @param integer $month 月
+     * @return array カレンダー
      */
     private function getCalendarDates($year, $month)
     {
@@ -44,5 +77,4 @@ class TopController extends Controller
         }
         return $dates;
     }
-    
 }
